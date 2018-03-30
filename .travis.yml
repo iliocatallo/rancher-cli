@@ -1,0 +1,22 @@
+sudo: required
+services: docker
+
+env:
+  matrix:
+      - VERSION=v0.6.8
+  global:
+      - secure: G1Yp5QLedbKhIE53+85+al5/hcy2ERKy75BepFmudDPwmZcNMCIUPTrZEfGSSV/vxke/A81vdUbBUYpp6WoQeWl5nAZwk4FH7YScvT+YsTfjtYfu+grGRebt3sy1bmy0K7KIsVKNQtaM1EbQ1EmLKO2eIEWujVmTqkrpk5Uxsc/Z2hnuHE3EsPeRz5RljshtcwXQsIXL8h/gEEQRqk8ozj6SJggSw5hgqNqvMYk85///lttExCCzl46lJimUwwFgOglxXKNPxbsA36bk97c7iewGG6mJ9bj3gFyODoCzsU/Kqvi3wqxzpIhEO1+XKyLmtEcI+qNmwCHnWdp4QbUEIu5Pc7UzOF5xcpL0C8rnkICgwEcZa5tHPGWLsnmqCfUD/+bt3Yb1mAqdcHrSi44VWzxQ+tdlmA56ZObD5MJfdNm11X18+83E0x87y08MkufmNvgnk3d/eIdcsuR2pHkBm+xIuvgVyOEhWRuhfLya5WNDkIIRLZ6iQ8PFQQWHZKFxOKFME0YuN2hev1MoX1luOM+kxrwBzLHP4w+TvqrNk1Tkb+7OGcUZ++6/FfFPROVikbP9hLDamQ0VjCv8cUVW3qrInzKxVY+fsTl/fnquou0sGQbGl5gZADoPFCf/d2BMlClOLDW/GLbyxJ8iDREdbiGv4UgxtdD/H0sy979Xijg=
+      - secure: CDbQiB5v8bIFZRBor0plkhczNbGi3IKIBYAglBZUBRissN9bIfPv1aXOKdxhGUHLgrP1fUFGS0WpGkFE8jbVlvmPqYdbLZd1eJFzAnaPblxyspLrNUdv5PS4RtDJXLec//cvXMIQJ08wSFr0yw+W6isZD136wGyLa23FJopx8tvwDyYlKEboqp3hooLCUkmSDNgOe8Bn/s0/UQiAU2D46diCjm+cfk0dIqsZXEGYm1dUaWgA0MCkQs7YHu0Rvh9MMi3gmfqHJMU6uqksATyweFGM5MEYZWVr6oMXkFbDGlcMbM/cRU7eu6S+PxvZ+vY/jEZhtmRzFPvcRAfyJXzieu1yJTJFaRMDN4JOYXVgVeNIzUv8HFBoDsXfNkcK3ORzyVE3KjctAYN5GnUGlWZ9/G/F0PXN8QTn5d73kUp9juibQwIJNztDUfuTWxPv1wKc7TjFaGIVLjmjlaVUHW3IHfBMngJBP35lEuGKao3WtTOYIwfyQKoUg2Re8qku1Tk9mCi7N1vN2DC0XNixMBCwv690tHHHmcNYy4I8lp6oZ0vnPiXs7fLEINxqfdCBOrwlpF63xUz/JyF0r5BCHK9T90uQ3tZFiFyWxjf1CDgh74FXp9O8E0ylPTFTlSoVwyR26yrk8jiZuJ7HS4N+i20BDiqULlpWKxF3mdBwY+zld64=
+
+install: true
+
+before_script:
+    - cd "$VERSION"
+    - IMAGE="$TRAVIS_REPO_SLUG:$VERSION"
+
+script:
+    - travis_retry docker build -t "$IMAGE" .
+
+after_script:
+    - echo "$DOCKER_HUB_PASSWORD"  | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - travis_retry docker push "$IMAGE"
