@@ -19,4 +19,4 @@ RUN apk del curl
 
 WORKDIR /data
 
-ENTRYPOINT ["rancher"]
+CMD ["sh"]
