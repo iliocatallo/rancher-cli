@@ -3,12 +3,12 @@ FROM alpine
 MAINTAINER Ilio Catallo <info@iliocatallo.it>
 
 ARG RANCHER_CLI_VERSION=v0.6.8
+ARG DOCKER_VERSION=19.03.2
 
 RUN apk add --no-cache ca-certificates openssh-client curl
 
 # Install docker client
-RUN DOCKER_TARBALL_NAME=$(curl -s --location https://download.docker.com/linux/static/stable/x86_64 | sed -n 's/.*href="\([^"]*\).*/\1/p' | grep docker- | grep .tgz | tail -n 1) \
-    && curl -sSL https://download.docker.com/linux/static/stable/x86_64/$DOCKER_TARBALL_NAME | tar -xz -C /usr/local/bin/ --strip-components=1 \
+RUN curl -sSL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar -xz -C /usr/local/bin/ --strip-components=1 \
     && chmod +x /usr/local/bin/docker
 
 # Install Rancher cli
